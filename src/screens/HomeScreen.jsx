@@ -10,7 +10,11 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Search from '../components/Search';
 import SingleDonationItem from '../components/SingleDonationItem';
 import { Cactus } from '../utils/Images';
+import { useSelector } from 'react-redux';
 const HomeScreen = () => {
+    const user = useSelector((state)=> state.user);
+    console.log("user", user);
+    
     return (
         <SafeAreaView style={styles.container}>
             <Search onSearch={(val) => console.log(val)
@@ -20,6 +24,7 @@ const HomeScreen = () => {
                 <SingleDonationItem image={Cactus} badgeTitle={"Environment"} donationTitle={"Tree Cactus"} price={22} />
 
             </View>
+            <Header         title={user.firstName + user.lastName} />
         </SafeAreaView>
     )
 }
