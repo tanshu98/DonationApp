@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Header from '../components/Header';
@@ -10,21 +10,19 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Search from '../components/Search';
 import SingleDonationItem from '../components/SingleDonationItem';
 import { Cactus } from '../utils/Images';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateFirstName } from '../utils/redux/slices/User';
 const HomeScreen = () => {
-    const user = useSelector((state)=> state.user);
+    const user = useSelector((state) => state.user);
     console.log("user", user);
-    
+
+    const dispatch = useDispatch();
+
+    // need to change the header title based on user click
+
     return (
         <SafeAreaView style={styles.container}>
-            <Search onSearch={(val) => console.log(val)
-            } />
-            <View style={styles.imageContainer}>
-                <SingleDonationItem image={Cactus} badgeTitle={"Environment"} donationTitle={"Tree Cactus"} price={22} />
-                <SingleDonationItem image={Cactus} badgeTitle={"Environment"} donationTitle={"Tree Cactus"} price={22} />
-
-            </View>
-            <Header         title={user.firstName + user.lastName} />
+        
         </SafeAreaView>
     )
 }
@@ -36,9 +34,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff'
     },
-    imageContainer:{
-        flexDirection:'row',
-        justifyContent:'space-between',
-        paddingHorizontal:24
+    imageContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 24
     }
 })
+
+// Now lets say, i wanna perform some actions uisng redux toolkit
+// So we'll be using something known as dispatch.
+// Note: updateFirstName we are passing a object as a payload..hence
+// we need to destructure it here like that..
