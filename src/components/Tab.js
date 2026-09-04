@@ -18,7 +18,7 @@ const Tab = props => {
         props.isInactive && styles.inActiveTab,
         tabWidth,
       ]}
-      onPress={props.onPress}
+      onPress={()=> props.onPress(props.TabId)}
     >
       <Text
         onTextLayout={event => {
@@ -44,6 +44,7 @@ Tab.propTypes = {
   title: PropTypes.string,
   isInactive: PropTypes.bool,
   onPress: PropTypes.func,
+  TabId: PropTypes.number.isRequired
 };
 
 export default Tab;
