@@ -17,16 +17,22 @@ import Tab from '../components/Tab';
 // import Highlited_Img from '../utils/Images/Highlited_Img'
 import { Highlited_Img } from '../utils/Images';
 import { updateSelectedCategoryId } from '../utils/redux/slices/Categories';
+import SingleDonationItem from '../components/SingleDonationItem';
 const HomeScreen = () => {
   const user = useSelector(state => state.user);
   const categories = useSelector(state => state.categories);
+  console.log('categories', categories);
+
   const donations = useSelector(state => state.donations);
-  console.log("donations", donations);
-  
+  console.log('donations', donations);
+
   const dispatch = useDispatch();
   // dispatch(resetToInitialState());
   const [categoryPage, setCategoryPage] = useState(1);
   const [categoryList, setCategoryList] = useState([]);
+  const [donationItems, setDonationItems] = useState([]);
+  console.log('donationItems', donationItems);
+
   const categoryPageSize = 4;
   const [isLoadingCategories, setIsLoadingCategories] = useState(false);
 
@@ -38,6 +44,15 @@ const HomeScreen = () => {
     }
     return items.slice(startIndex, endIndex);
   };
+
+  // So we need to run the func everytime the selected
+  // category item changes.
+  useEffect(() => {
+    const items = donations.items.filter(val =>
+      val.categoryIds.includes(categories.selectedCategoryId),
+    );
+    setDonationItems(items);
+  }, [categories.selectedCategoryId]);
 
   useEffect(() => {
     setIsLoadingCategories(true);
@@ -82,10 +97,13 @@ const HomeScreen = () => {
           <FlatList
             onEndReachedThreshold={0.5}
             onEndReached={() => {
-                if(isLoadingCategories) {
-                    return;
-                }
-              console.log('User has reached the end and we are getting more data for page number', categoryPage);
+              if (isLoadingCategories) {
+                return;
+              }
+              console.log(
+                'User has reached the end and we are getting more data for page number',
+                categoryPage,
+              );
 
               setIsLoadingCategories(true);
 
@@ -115,6 +133,29 @@ const HomeScreen = () => {
             )}
           />
         </View>
+        {donationItems.length > 0 && (
+          <View style={styles.donationItemsContainer}>
+            {donationItems.map(val => (
+                <View   key={val.donationItemId} style={styles.singleDonationItem}>
+              <SingleDonationItem
+              
+                onPress={selctedDonationId => {
+                  console.log(selctedDonationId);
+                }}
+                donationTitle={val.name}
+                uri={val.image}
+                price={parseFloat(val.price)}
+                badgeTitle={
+                  categories.categories.filter(
+                    value => value.categoryId === categories.selectedCategoryId,
+                  )[0].name
+                }
+                donationItemId={val.donationItemId}
+              />
+              </View>
+            ))}
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -175,9 +216,29 @@ const styles = StyleSheet.create({
     marginHorizontal: 24,
     marginBottom: 16,
   },
+  donationItemsContainer: {
+    marginVertical: 20,
+    marginHorizontal: 24,
+    flexDirection:'row',
+    justifyContent:'center',
+    flexWrap:'wrap'
+  },
+  singleDonationItem: {
+    maxWidth:'49%',
+    marginBottom:23
+  }
 });
 
 // Basic Idea in Pagination
 // We display List based on user scroll
 // So, we will be defining new CategoryList which we will display on user scroll
 // And then we need to define how many items do we wanna show per page..i.e cateogoryPageSize
+
+// 143 === MODULE==
+// Lets focus on how to grab the donations,according to the categories
+// that we are going to be selected here..
+// So to do this, we will be running some kind of func to select
+// the items from the items list here in the donation reducer
+// according to the category id selected..
+// so basically we will be matching the category ids present in
+// the donaiton reducer with the category reducer

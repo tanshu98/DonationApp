@@ -16,7 +16,12 @@ const Header = props => {
   };
   return (
     <View>
-      <Text style={[stylesToApply(), props.color && {color: props.color}]}>{props.title}</Text>
+      <Text
+        style={[stylesToApply(), props.color && { color: props.color }]}
+        numberOfLines={props.numberOfLines ? props.numberOfLines : null}
+      >
+        {props.title}
+      </Text>
     </View>
   );
 };
@@ -24,13 +29,14 @@ const Header = props => {
 Header.defaultProps = {
   title: '',
   type: 1,
-  color: '#0000'
+  color: '#0000',
 };
 
 Header.propTypes = {
   title: PropTypes.string,
   type: PropTypes.number,
-  color: PropTypes.string
+  color: PropTypes.string,
+  numberOfLines: PropTypes.number,
 };
 
 export default Header;
@@ -42,13 +48,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     lineHeight: 29,
   },
-    title2: {
+  title2: {
     fontFamily: 'Inter 18pt',
     fontWeight: '600',
     fontSize: 18,
     lineHeight: 22,
   },
-    title3: {
+  title3: {
     fontFamily: 'Inter 18pt',
     fontWeight: '600',
     fontSize: 16,
