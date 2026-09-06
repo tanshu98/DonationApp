@@ -204,21 +204,25 @@ const initialState = {
     },
   ],
   selectedDonationId: null,
+  selectedDonationInformation: {},
 };
 
 const Donations = createSlice({
   name: 'donations',
   initialState,
-  reducers:{
-    resetDonations:()=> {
-        return initialState;
+  reducers: {
+    resetDonations: () => {
+      return initialState;
     },
-    updateSelectedDonationId: (state, action)=> {
-        state.selectedDonationId = action.payload;
-    }
-  }
+updateSelectedDonationId: (state, action) => {
+      state.selectedDonationId = action.payload;
+      state.selectedDonationInformation = state.items.find(
+        item => item.donationItemId === action.payload,
+      );
+    },
+  },
 });
 
-export const {resetDonations, updateSelectedDonationId} = Donations.actions;
+export const { resetDonations, updateSelectedDonationId } = Donations.actions;
 
 export default Donations.reducer;
