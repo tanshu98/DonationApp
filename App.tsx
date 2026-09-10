@@ -7,6 +7,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 
 import MainNavigation from './src/navigation/MainNavigation';
 import store, {persistor} from './src/utils/redux/store';
+import Toast from 'react-native-toast-message';
 
 const App = () => {
   useEffect(() => {
@@ -26,6 +27,7 @@ const App = () => {
           </NavigationContainer>
         </SafeAreaProvider>
       </PersistGate>
+      <Toast />
     </Provider>
   );
 };
