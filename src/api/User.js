@@ -5,6 +5,8 @@ import {
   updateProfile,
   signInWithEmailAndPassword,
 } from '@react-native-firebase/auth';
+import store from '../utils/redux/store';
+import { updateToken } from '../utils/redux/slices/User';
 
 const auth = getAuth();
 
@@ -48,5 +50,27 @@ export const LoginUser = async (email, password) => {
                     return {status: false, error: 'The email you entered does not exist.'}
         }
         return {status: false, error: 'Something went wrong!'}
+    }
+}
+
+export const logout = async ()=> {
+    await auth.signOut();
+}
+
+export const checkToken = async ()=> {
+    try {
+        const user = auth.currentUser;
+        if(!user) {
+            console.log("No user is logged in.");
+            return null;
+        }
+        let response = await user.getIdToken(true);
+        store.dispatch(updateToken(response));
+        console.log("res==",response);
+        
+        return response;
+    }catch(error) {
+        console.log("error", error);
+        
     }
 }

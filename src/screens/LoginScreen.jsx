@@ -7,12 +7,14 @@ import Button from '../components/Button';
 import { Routes } from '../navigation/Routes';
 import { LoginUser } from '../api/User';
 import Toast from 'react-native-toast-message';
+import { useDispatch } from 'react-redux';
+import { login, resetToInitialState } from '../utils/redux/slices/User';
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    console.log('email', email);
-    console.log('LoginUser:', LoginUser);
+    const dispatch = useDispatch();
+    // dispatch(resetToInitialState());
 
 
     return (
@@ -57,6 +59,9 @@ const LoginScreen = ({ navigation }) => {
                                     type: 'success',
                                     text1: 'Login Successful',
                                 });
+                                // when the user login is succesfful, we will dispatch
+                                // LoginIn func
+                                dispatch(login(user.data))
                                 navigation.navigate(Routes.Home);
                             }
                         }}

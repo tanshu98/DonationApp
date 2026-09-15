@@ -20,20 +20,21 @@ import { updateSelectedCategoryId } from '../utils/redux/slices/Categories';
 import { updateSelectedDonationId } from '../utils/redux/slices/Donations';
 import SingleDonationItem from '../components/SingleDonationItem';
 import { Routes } from '../navigation/Routes';
+import { resetToInitialState } from '../utils/redux/slices/User';
+import { logout } from '../api/User';
 const HomeScreen = ({ navigation }) => {
     const user = useSelector(state => state.user);
+    // console.log("user", user);
+
     const categories = useSelector(state => state.categories);
-    console.log('categories', categories);
 
     const donations = useSelector(state => state.donations);
-    console.log('donations', donations);
 
     const dispatch = useDispatch();
     // dispatch(resetToInitialState());
     const [categoryPage, setCategoryPage] = useState(1);
     const [categoryList, setCategoryList] = useState([]);
     const [donationItems, setDonationItems] = useState([]);
-    console.log('donationItems', donationItems);
 
     const categoryPageSize = 4;
     const [isLoadingCategories, setIsLoadingCategories] = useState(false);
@@ -72,16 +73,26 @@ const HomeScreen = ({ navigation }) => {
                     <View>
                         <Text style={styles.headerIntroText}>Hello,</Text>
                         <View style={styles.username}>
-                            <Header title={user.firstName + ' ' + user.lastName[0] + '.👋'} />
+                            <Header title={user.displayName + '.👋'} />
                         </View>
                     </View>
-                    <Pressable onPress={()=> navigation.navigate(Routes.Register)}>
+                    <View>
                         <Image
                             source={{ uri: user.profileImage }}
                             resizeMode="contain"
                             style={styles.profileImage}
                         />
-                    </Pressable>
+                        <Pressable
+                        onPress={async()=> {
+                            dispatch(resetToInitialState());
+                            // then we have to logout from the firebase too.
+                            await logout();
+                        }}
+                        >
+                            <Header type={2} title="Logout" color={"#156CF7"} />
+                        </Pressable>
+                    </View>
+
 
                 </View>
                 <View style={styles.searchBox}>
